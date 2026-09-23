@@ -5,6 +5,11 @@ FROM quay.io/pypa/manylinux_2_34 AS base
 ENV PYTHON_SYS_EXECUTABLE=/opt/python/cp312-cp312/bin/python3.12
 ENV PATH=/root/.nvm/versions/node/v22.16.0/bin:/opt/python/cp312-cp312/bin:/opt/node-v22.16.0-linux-x64/bin:/root/.cargo/bin:$PATH
 
+# pypa's newer manylinux build-cpython.sh references MANYLINUX_DISABLE_CLANG under
+# set -u; define it (build CPython with gcc, the long-standing default — clang-devel
+# above is only for Rust bindgen/zstd-sys, not the interpreter build).
+ENV MANYLINUX_DISABLE_CLANG=1
+
 
 # Build dependencies.
 # - clang-devel: used by bindgen, used by zstd-sys
